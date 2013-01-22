@@ -3,6 +3,12 @@
 
 #include "cocos2d.h"
 
+using namespace cocos2d;
+
+typedef struct {
+    CCPoint p1, p2;
+} Line;
+
 class HelloWorld : public cocos2d::CCLayer
 {
 public:
@@ -17,6 +23,16 @@ public:
 
     // preprocessor macro for "static create()" constructor ( node() deprecated )
     CREATE_FUNC(HelloWorld);
+    
+    virtual void update(float dt);
+    
+    float speedX, speedY;
+    
+    CCSprite* pSprite;
+    
+    Line *lines;
+    
+    virtual void draw();
 };
 
 #endif // __HELLOWORLD_SCENE_H__

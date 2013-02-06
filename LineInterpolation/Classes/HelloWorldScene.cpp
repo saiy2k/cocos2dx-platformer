@@ -78,52 +78,7 @@ bool HelloWorld::init()
 }
 
 void HelloWorld::update(float dt) {
-    CCPoint p = pSprite->getPosition();
-    
-    speedX *= 0.95; // friction reduces the speed over time
-    
-    if (pSprite->getTag() == -1) { // free falling
-        CCLog("searching for platform... hero is falling");
-        // iterate through all platforms
-        for (int i = 0; i < COUNT; i++) {
-            // if hero position lies between the x bounds of any platform
-            if ( lines[i].p1.x < p.x && lines[i].p2.x > p.x ) {
-                // also it is closer than 100 pixels to the platform
-                if ( p.y - lines[i].p1.y < 100 && p.y - lines[i].p1.y > 0) {
-                    // assign the platform to the hero
-                    pSprite->setTag(i);
-                    break;
-                }
-            }
-        }
-        // gravity pull decreases the y-speed
-        speedY -= 10.0;
-        
-        // not allowing hero to go down indefinitely, by making him swap to the top
-        if ( p.y < 0 ) {
-            p.y = 768;
-        }
-    } else { // resting in or closer to some platform
-        int tag = pSprite->getTag();
-        CCLog("in platform %d", tag);
-        
-        // make sure if hero is still in the x bounds of the platform or moved away
-        if ( lines[tag].p1.x < p.x && lines[tag].p2.x > p.x ) {
-            float x2, y2;
-            x2 = p.x;
-            // platform may be a sloppy one, so interpolate the y value based on end points of platform and current hero position 
-            y2 = (x2 - lines[tag].p1.x) * (lines[tag].p2.y - lines[tag].p1.y) / (lines[tag].p2.x - lines[tag].p1.x) + lines[tag].p1.y;
-            if (p.y - y2 > 0) { // if hero is above platform, make him fall down
-                speedY -= 10.0;
-            } else {            // nullify the y speed and rest on platform
-                speedY = 0;
-                p.y = y2;
-            }
-        } else { // switch to free fall mode, if hero is moved away
-            pSprite->setTag(-1);
-        }
-    }
-    
+    CCPoint p = pSprite->getPosition();    
     pSprite->setPosition( ccp( p.x + speedX * dt, p.y + speedY * dt ) );
 }
 
